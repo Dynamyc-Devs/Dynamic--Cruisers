@@ -130,3 +130,7 @@ def get_dealerships():
     ]
     response = make_response(jsonify(dealerships_dict), 200)
     return response
+
+    
+if __name__ == '__main__':
+    app.run(port=5555)
