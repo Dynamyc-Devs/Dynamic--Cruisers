@@ -7,10 +7,8 @@ from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
 
-#usermixin is used to manage usersessions
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), unique=True, nullable=False)
     lastname = db.Column(db.String(50), unique=True, nullable=False)
@@ -18,9 +16,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False)
     
     # Relationships
-    reviews = db.relationship('Reviews', backref='user', lazy=True)
-    likes = db.relationship('Likes', backref='user', lazy=True)
-    ratings = db.relationship('Rating', backref='user', lazy=True)
+    user_reviews = db.relationship('Review', backref='user', lazy=True)
+    user_likes = db.relationship('Likes', backref='user', lazy=True)
+    user_ratings = db.relationship('Rating', backref='user', lazy=True)
     vehicles_owned = db.relationship('Vehicle', secondary='user_vehicle', backref='users', lazy=True)
 
     def __repr__(self):
@@ -28,51 +26,24 @@ class User(UserMixin, db.Model):
     
 class Vehicle(db.Model, SerializerMixin):
     __tablename__ = 'vehicles'
-
     id = db.Column(db.Integer, primary_key=True)
     make = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-
     availability = db.Column(db.Boolean, nullable=False, default=True)
     numbers_available = db.Column(db.Integer, nullable=False, default=1)
-
-    likes = db.Column(db.Integer, nullable=False, default=0)
     image = db.Column(db.String(20), nullable=False, default='default.jpg')
     
     # Relationships
-    dealerships_id = db.relationship('Dealership', secondary='vehicle_dealership', backref='vehicles', lazy=True)
-    reviews_id = db.relationship('Review', backref='vehicles', lazy=True)
+    vehicle_likes = db.relationship('Likes', backref='vehicle', lazy=True)
+    dealerships = db.relationship('Dealership', secondary='vehicle_dealership', backref='vehicles', lazy=True)
+    vehicle_reviews = db.relationship('Review', backref='vehicle', lazy=True)
 
     def __repr__(self):
         return f"Vehicle('{self.make}', '{self.model}', '{self.year}')"
     
-
-# # Association table that caters for the many-to-many relationship
-
-# user_vehicle = db.Table(
-#     'user_vehicle',
-#     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-#     db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True)
-#     extend_existing=True #allows us to redefine the table without raising an error
-# )
-
-#a dedicated model class for the association
-class UserVehicle(db.Model):
-    __tablename__ = 'user_vehicle'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
-
-    # Additional fields if needed...
-
-    def __repr__(self):
-        return f"UserVehicle('{self.user_id}', '{self.vehicle_id}')"
-    
 class Dealership(db.Model, SerializerMixin):
     __tablename__ = 'dealerships'
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
@@ -81,61 +52,57 @@ class Dealership(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"Dealership('{self.name}', '{self.city}', '{self.state}')"
-    
 
-class VehicleDealership(db.Model):
-    __tablename__ = 'vehicle_dealership'
-
-    id = db.Column(db.Integer, primary_key=True)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
-    dealership_id = db.Column(db.Integer, db.ForeignKey('dealerships.id'), nullable=False)
-
-    # Additional fields if needed...
-
-    def __repr__(self):
-        return f"VehicleDealership('{self.vehicle_id}', '{self.dealership_id}')"
-
-    
-class Review (db.Model):
+class Review(db.Model):
     __tablename__ = 'reviews'
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     
     # Relationships
-    user_id = db.relationship('User', backref='reviews', lazy=True)
-    vehicle_id = db.relationship('Vehicle', backref='reviews', lazy=True)
-    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
     
     def __repr__(self):
         return f"Review('{self.title}', '{self.date_posted}')"
     
-class Likes (db.Model):
+class Likes(db.Model):
     __tablename__ = 'likes'
-
     id = db.Column(db.Integer, primary_key=True)
     
     # Relationships
-    user_id = db.relationship('User', backref='likes', lazy=True)
-    vehicle_id = db.relationship('Vehicle', backref='likes', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
     
     def __repr__(self):
-        return f"Likes('{self.user_id}', '{self.review_id}')"
+        return f"Likes('{self.user_id}', '{self.vehicle_id}')"
     
-class Rating (db.Model):
+class Rating(db.Model):
     __tablename__ = 'ratings'
-    
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False)
     
     # Relationships
-    user_id = db.relationship('User', backref='ratings', lazy=True)
-    dealership_id = db.relationship('Dealership', backref='ratings', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    dealership_id = db.Column(db.Integer, db.ForeignKey('dealerships.id'), nullable=False)
     
     def __repr__(self):
         return f"Rating('{self.rating}')"
-    
 
-    
+# Association table for the many-to-many relationship
+user_vehicle = db.Table(
+    'user_vehicle',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True),
+    extend_existing=True
+)
+
+class VehicleDealership(db.Model):
+    __tablename__ = 'vehicle_dealership'
+    id = db.Column(db.Integer, primary_key=True)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
+    dealership_id = db.Column(db.Integer, db.ForeignKey('dealerships.id'), nullable=False)
+
+    def __repr__(self):
+        return f"VehicleDealership('{self.vehicle_id}', '{self.dealership_id}')"
