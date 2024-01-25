@@ -10,7 +10,7 @@ from models import db, User, Vehicle, Dealership, Review, Rating, Likes, UserVeh
 app = Flask(__name__)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dynamic_cruisers_user:9dHddQpoZzKsdaF5qZVgCnQTqHAWxlJA@dpg-cmp3g0vqd2ns738o3ld0-a.frankfurt-postgres.render.com/dynamic_cruisers'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 

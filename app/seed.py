@@ -1,8 +1,12 @@
-from app import db, User, Vehicle, Dealership, Review, Likes, Rating
+from app.app import app, db
 from faker import Faker
 from datetime import datetime
 
-fake = Faker()
+
+with app.app_context():
+    from models import  User, Vehicle, Dealership, Review, Likes, Rating
+
+    fake = Faker()
 
 def generate_fake_user():
     return User(
