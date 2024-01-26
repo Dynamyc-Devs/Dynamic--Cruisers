@@ -4,15 +4,23 @@ import { PiWarehouseBold } from 'react-icons/pi';
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
-import Background1 from '../Public/_background/Background1.jpg';
-import BMWlogo from '../Public/_logos/BMW-logo.jpg';
-import Jeeplogo from '../Public/_logos/Jeep-logo.png';
-import Mercedeslogo from '../Public/_logos/Mercedes-logo.jpg';
-import Nissanlogo from '../Public/_logos/Nissan-logo.jpg';
-import Toyotalogo from '../Public/_logos/Toyota-logo.jpg';
+import { useRouter } from 'next/router';
 
+import Background1 from '../Public/_background/Background1.jpg';
 
 function Body() {
+    const router = useRouter();
+
+    const handleLoginClick = () => {
+        // Redirect to the login page
+        router.push('/auth/login');
+    };
+
+    const handleSignupClick = () => {
+        // Redirect to the signup page
+        router.push('/auth/signup');
+    };
+
     return (
         <div className='body'>
             <div className='body__image'>
@@ -41,6 +49,22 @@ function Body() {
                         </select>
                     </div>
                 </div>
+                <div className='nav__links__container' onClick={handleLoginClick}>
+                    <div className='nav__links__container__icon'>
+                        <IoMdLogIn size={30} />
+                    </div>
+                    <div className='nav__links__container__text'>
+                        <h3>Login</h3>
+                    </div>
+                </div>
+                <div className='nav__links__container' onClick={handleSignupClick}>
+                    <div className='nav__links__container__icon'>
+                        <IoMdLogIn size={30} />
+                    </div>
+                    <div className='nav__links__container__text'>
+                        <h3>Signup</h3>
+                    </div>   
+                </div>
                 <div className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <PiWarehouseBold size={30} />
@@ -64,13 +88,6 @@ function Body() {
                     <div className='nav__links__container__text'>
                         <h3>Car Reviews</h3>
                     </div>
-                </div><div className='nav__links__container'>
-                    <div className='nav__links__container__icon'>
-                        <IoMdLogIn size={30} />
-                    </div>
-                    <div className='nav__links__container__text'>
-                        <h3>Login | Sign Up</h3>
-                    </div>
                 </div>
             </div>
 
@@ -81,8 +98,8 @@ function Body() {
                     <h3>...Shop by brand...</h3>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
-export default Body
+export default Body;
