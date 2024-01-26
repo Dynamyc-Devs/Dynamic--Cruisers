@@ -1,29 +1,29 @@
-// pages/auth/login.js
+// pages/auth/signup.js
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
 
-    // Add your authentication logic here
-    // For example, you can make an API request to verify the credentials
-    // If successful, you can redirect the user to a dashboard page
+    // Add your sign-up logic here
+    // For example, you can make an API request to create a new user
+    // If successful, you can redirect the user to the login page
     // Otherwise, display an error message
 
-    // For now, let's just redirect to a dashboard page
-    router.push('/dashboard');
+    // For now, let's just redirect to the login page
+    router.push('/auth/login');
   };
 
   return (
     <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
+      <h1>Sign Up</h1>
+      <form onSubmit={handleSignup}>
         <label>
           Username:
           <input
@@ -42,17 +42,17 @@ const Login = () => {
           />
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
 
       <p>
-        Don't have an account?{' '}
-        <Link href="/auth/register">
-          <a>Register</a>
+        Already have an account?{' '}
+        <Link href="/auth/login">
+          <a>Login</a>
         </Link>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
