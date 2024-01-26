@@ -15,9 +15,16 @@
 
   .nav__links {
     display: flex;
-    justify-content: space-between; /* Align links to the right */
-    padding: 20px; /* Add padding for spacing */
-    align-items: center; /* Align items vertically */
+    flex-direction: row;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    text-decoration: none;
+    justify-content: end;
+
+    .search__bar .select__brands {
+        justify-content: end;
+        margin-right: 850px;
+        margin-top: 40px;
+    }
   }
 
   .nav__links__container {

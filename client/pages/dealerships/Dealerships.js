@@ -1,35 +1,31 @@
-import React from 'react';
+import React from 'react'
 import Image from 'next/image';
-import { PiWarehouseBold } from 'react-icons/pi';
+import { IoHomeOutline } from "react-icons/io5";
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
-<<<<<<< HEAD
-import { useRouter } from 'next/router';
-=======
-import { IoHomeOutline } from "react-icons/io5";
-import Background1 from '../Public/_background/Background1.jpg';
+import { PiWarehouseBold } from 'react-icons/pi';
+import Background1 from './_background/Background1.jpg';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
->>>>>>> e8311b51d422846b50a95711d0b25b688c4d45e7
 
-import Background1 from '../Public/_background/Background1.jpg';
+function Dealerships() {
+    const [dealerships, setDealerships] = useState([]);
 
-function Body() {
-    const router = useRouter();
+    useEffect(() => {
+        const fetchDealerships = async () => {
+            const res = await fetch('http://localhost:5555/dealerships');
+            const data = await res.json();
+            setDealerships(data);
+        }
+        fetchDealerships();
+    }, []);
 
-    const handleLoginClick = () => {
-        // Redirect to the login page
-        router.push('/auth/login');
-    };
 
-    const handleSignupClick = () => {
-        // Redirect to the signup page
-        router.push('/auth/signup');
-    };
 
     return (
-        <div className='body'>
+        <div className='dealerships'>
             <div className='body__image'>
                 <Image
                     src={Background1}
@@ -56,25 +52,6 @@ function Body() {
                         </select>
                     </div>
                 </div>
-<<<<<<< HEAD
-                <div className='nav__links__container' onClick={handleLoginClick}>
-                    <div className='nav__links__container__icon'>
-                        <IoMdLogIn size={30} />
-                    </div>
-                    <div className='nav__links__container__text'>
-                        <h3>Login</h3>
-                    </div>
-                </div>
-                <div className='nav__links__container' onClick={handleSignupClick}>
-                    <div className='nav__links__container__icon'>
-                        <IoMdLogIn size={30} />
-                    </div>
-                    <div className='nav__links__container__text'>
-                        <h3>Signup</h3>
-                    </div>   
-                </div>
-                <div className='nav__links__container'>
-=======
                 <Link href='/' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoHomeOutline size={30} />
@@ -84,12 +61,11 @@ function Body() {
                     </div>
                 </Link>
                 <Link href='/dealerships' className='nav__links__container'>
->>>>>>> e8311b51d422846b50a95711d0b25b688c4d45e7
                     <div className='nav__links__container__icon'>
                         <PiWarehouseBold size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Dealers</h3>
+                        <h3>Dealerships</h3>
                     </div>
                 </Link>
                 <Link href='/cars' className='nav__links__container'>
@@ -107,9 +83,6 @@ function Body() {
                     <div className='nav__links__container__text'>
                         <h3>Reviews</h3>
                     </div>
-<<<<<<< HEAD
-                </div>
-=======
                 </Link>
                 <Link href='/dashboard' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
@@ -119,18 +92,27 @@ function Body() {
                         <h3>Login</h3>
                     </div>
                 </Link>
->>>>>>> e8311b51d422846b50a95711d0b25b688c4d45e7
             </div>
 
             <div className='body__container'>
                 <div className='body__container__text'>
-                    <h1>Used and New cars for sale in Nairobi...</h1>
-                    <br />
-                    <h3>...Shop by brand...</h3>
+                    <h1>Available Dealerships</h1>
+                    <div className='body__container__dealerships'>
+                        {dealerships.map((dealership) => (
+                            <div className='body__container__dealerships__card'>
+                                <div className='body__container__dealerships__card__text'>
+                                    <h2>{dealership.name}</h2>
+                                    <h3>Address: {dealership.address}</h3>
+                                    <p>Website: {dealership.website}</p>
+                                    <p>Rating: {dealership.rating}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
-export default Body;
+export default Dealerships
