@@ -1,35 +1,35 @@
-// pages/auth/Login.js
+// pages/auth/Signup.js
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
-    // TODO: Implement authentication logic using your preferred method
+    // TODO: Implement sign-up logic using your preferred method
     // For example, you can use NextAuth.js, Firebase, or your custom API endpoint
 
     try {
-      // Assuming you have an authentication function that returns user data
-      const userData = await authenticate(username, password);
+      // Assuming you have a sign-up function that returns user data
+      const userData = await signup(username, password);
       
-      // Redirect to dashboard upon successful login
-      router.push('/dashboard');
+      // Redirect to login page upon successful sign-up
+      router.push('/auth/login');
     } catch (error) {
-      console.error('Authentication error:', error.message);
-      // Handle authentication error (display error message, redirect, etc.)
+      console.error('Sign-up error:', error.message);
+      // Handle sign-up error (display error message, redirect, etc.)
     }
   };
 
   return (
     <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
+      <h1>Sign Up</h1>
+      <form onSubmit={handleSignup}>
         <label>
           Username:
           <input
@@ -48,17 +48,17 @@ const Login = () => {
           />
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
 
       <p>
-        Don't have an account?{' '}
-        <Link href="/auth/signup">
-          <a>Register</a>
+        Already have an account?{' '}
+        <Link href="/auth/login">
+          <a>Login</a>
         </Link>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
