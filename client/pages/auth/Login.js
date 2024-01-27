@@ -1,10 +1,27 @@
 // Login.js
-import React from 'react';
-import loginHtml from './login.html';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 function Login() {
+  const router = useRouter();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Handle login logic here
+
+    // For example, redirect to home page after login
+    router.push('/');
+  };
+
   return (
-    <div dangerouslySetInnerHTML={{ __html: loginHtml }} />
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Add your login form fields here */}
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 }
 
